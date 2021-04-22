@@ -2,14 +2,14 @@ const Validator = require('validator');
 const isEmpty = require('is-empty');
 const {default: validator} = require('validator');
 
-module.exports = validateRegistration = () => {
+module.exports = validateRegistration = (data) => {
     //Setting errors
     let errors = {};
 
     // converting empty firlds to an string so we can use validator functions
     data.username = !isEmpty(data.username) ? data.username : '';
     data.last_name = !isEmpty(data.last_name) ? data.last_name : '';
-    data.frist_name = !isEmpty(data.frist_name) ? data.frist_name : '';
+    data.first_name = !isEmpty(data.first_name) ? data.first_name : '';
     data.email = !isEmpty(data.email) ? data.email : '';
     data.phone = !isEmpty(data.phone) ? data.phone : '';
     data.address = !isEmpty(data.address) ? data.address : '';
@@ -23,8 +23,8 @@ module.exports = validateRegistration = () => {
     }
 
     //first name check
-    if (Validator.isEmpty(data.frist_name)) {
-        errors.frist_name = 'first name field is empty';
+    if (Validator.isEmpty(data.first_name)) {
+        errors.first_name = 'first name field is empty';
     }
     //last name check
     if (Validator.isEmpty(data.last_name)) {

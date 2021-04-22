@@ -9,6 +9,7 @@ const validateRegistrationInput = require('../../Validation/regitration');
 const user = require('../../Models/user');
 
 
+
 router.post('/registration', (req, res) => {
     //Form Validation
     const {errors, isValid} = validateRegistrationInput(req.body);
@@ -32,7 +33,7 @@ router.post('/registration', (req, res) => {
                 phone: req.body.phone,
                 email: req.body.email,
                 password: req.body.password,
-                files: req.body.files
+                files: req.body.avatar
             });
             // Hash password before saving in database
             bcrypt.genSalt(10, (err, salt) => {
@@ -41,9 +42,11 @@ router.post('/registration', (req, res) => {
                         throw err;
                     }
                     newUser.password = hash;
-                    newUser.save().the(user => res.jon(user)).catch(err => console.log(err));
+                    newUser.save().the(user => res.status(201).json(user)).catch(err => console.log(err));
                 });
             });
         }
     });
 });
+
+module.exports = router;
