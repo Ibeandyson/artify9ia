@@ -6,7 +6,7 @@ const bcrypt = require('bcryptjs');
 const validateRegistrationInput = require('../../Validation/regitration');
 
 //Import User Model
-const user = require('../../Models/user');
+const User = require('../../Models/user');
 
 
 
@@ -20,11 +20,11 @@ router.post('/registration', (req, res) => {
     }
 
     //Adding New User
-    user.findOne({email: req.body.email}).then(user => {
+    User.findOne({email: req.body.email}).then(user => {
         if (user) {
             return res.status(400).json({email: 'Email already exist'});
         } else {
-            const newUser = new user({
+            const newUser = new User({
                 username: req.body.username,
                 first_name: req.body.first_name,
                 last_name: req.body.last_name,
@@ -39,10 +39,10 @@ router.post('/registration', (req, res) => {
             bcrypt.genSalt(10, (err, salt) => {
                 bcrypt.hash(newUser.password, salt, (err, hash) => {
                     if (err) {
-                        throw err;
+                        throw "hash err", err;
                     }
                     newUser.password = hash;
-                    newUser.save().the(user => res.status(201).json(user)).catch(err => console.log(err));
+                    newUser.save().then(user => res.status(201).json(user)).catch(err => console.log(err));
                 });
             });
         }
