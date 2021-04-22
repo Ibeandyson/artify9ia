@@ -9,7 +9,7 @@ const validateRegistrationInput = require('../../Validation/regitration');
 const user = require('../../Models/user');
 
 
-router.post('/registeration', (req, res) => {
+router.post('/registration', (req, res) => {
     //Form Validation
     const {errors, isValid} = validateRegistrationInput(req.body);
 

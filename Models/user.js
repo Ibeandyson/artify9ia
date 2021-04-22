@@ -40,7 +40,7 @@ const UserSchema = new Schema({
     },
     files: {
         type: String,
-        require: true
+        require: false
     },
     date: {
         type: Date,
