@@ -4,13 +4,15 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const passport = require('passport');
-const multer  = require('multer')
+const multer = require('multer');
+
 
 // //Passport config
 // require("./config/passport")(passport);
 
 //Importing All Controllers Functions
 const registration = require('./Controllers/User-contollers/user-registration-controller');
+const login = require('./Controllers/User-contollers/user-login-controller');
 
 //init epress for useage
 const app = epress();
@@ -24,8 +26,17 @@ app.use(bodyParser.urlencoded({extended: true}));
 //Use bodyparser to parse application/json
 app.use(bodyParser.json());
 
-//Use Multer for from data
-const upload = multer({ dest: 'uploads/' })
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, 'uploads')
+    },
+    filename: (req, file, cb) => {
+        cb(null, file.fieldname + '-' + Date.now())
+    }
+});
+ 
+const upload = multer({ storage: storage });
+
 
 //Passport middleware
 app.use(passport.initialize());
@@ -46,8 +57,6 @@ mongoose
 
 //All Apis End Points Routers
 app.use('/api/auth', upload.single('avatar'), registration);
-
-
-
+app.use('/api/auth', login);
 
 module.exports = app;

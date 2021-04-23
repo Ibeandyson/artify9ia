@@ -1,14 +1,14 @@
 const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcryptjs');
+const fs = require('fs');
+const path = require('path');
 
 //Importing Registration Validation
 const validateRegistrationInput = require('../../Validation/regitration');
 
 //Import User Model
 const User = require('../../Models/user');
-
-
 
 router.post('/registration', (req, res) => {
     //Form Validation
@@ -33,13 +33,17 @@ router.post('/registration', (req, res) => {
                 phone: req.body.phone,
                 email: req.body.email,
                 password: req.body.password,
-                files: req.body.avatar
+                avatar: {
+                    data: fs.readFileSync(path.join(__dirname + '/uploads/' + req.file.filename)),
+                    contentType: 'image/png'
+                }
             });
+            console.log("image", fs.readFileSync(path.join(__dirname + '/uploads/' + req.file.filename)) )
             // Hash password before saving in database
-            bcrypt.genSalt(10, (salt) => {
+            bcrypt.genSalt(10, (err, salt) => {
                 bcrypt.hash(newUser.password, salt, (err, hash) => {
                     if (err) {
-                        throw "hash err", err;
+                        throw err;
                     }
                     newUser.password = hash;
                     newUser.save().then(user => res.status(201).json(user)).catch(err => console.log(err));
